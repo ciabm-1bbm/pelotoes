@@ -115,3 +115,70 @@
     <script src="js/script.js"></script>
 </body>
 </html>
+const usuarios = {
+    "685582": { role: "admin", nomeGuerra: "HOMRICH" },
+    "3698653": { role: "admin", nomeGuerra: "JULIA" },
+    "4354737": { role: "admin", nomeGuerra: "BRUNO" },
+    "4279310": { role: "admin", nomeGuerra: "MARTINS" },
+    "3146316": { role: "admin", nomeGuerra: "LOPES" },
+    "3696790": { role: "admin", nomeGuerra: "DA COSTA" },
+    "2822130": { role: "admin", nomeGuerra: "MEDEIROS" },
+    "3696391": { role: "padrao", nomeGuerra: "BOTTINI" },
+    "3205614": { role: "admin", nomeGuerra: "HERMENEGILDO" },
+    "4672410": { role: "admin", nomeGuerra: "GARIBALDI" }
+};
+
+function login() {
+    const id = document.getElementById("idFuncional").value;
+    const senha = document.getElementById("senha").value.toLowerCase();
+    const lembrar = document.getElementById("lembrar").checked;
+    const loginErro = document.getElementById("loginErro");
+    const loginModal = document.getElementById("loginModal");
+
+    if (usuarios[id] && senha === (usuarios[id].nomeGuerra.toLowerCase() + "193")) {
+        if (lembrar) {
+            localStorage.setItem("login", id);
+        } else {
+            localStorage.removeItem("login"); // Remove se o "lembrar" não estiver marcado
+        }
+        loginModal.classList.remove("active"); // Remove a classe 'active' para fechar o modal
+        loginErro.innerText = ""; // Limpa qualquer mensagem de erro anterior
+    } else {
+        loginErro.innerText = "Identidade ou senha incorreta.";
+    }
+}
+
+// Função para exibir o modal
+function showLoginModal() {
+    const loginModal = document.getElementById("loginModal");
+    loginModal.classList.add("active"); // Adiciona a classe 'active' para exibir o modal
+    document.getElementById("idFuncional").value = ""; // Limpa campos ao abrir
+    document.getElementById("senha").value = "";
+    document.getElementById("loginErro").innerText = "";
+}
+
+// Ao carregar a página, verifica se o usuário já está logado
+window.onload = function() {
+    const saved = localStorage.getItem("login");
+    // Se não há login salvo ou o ID salvo não existe na lista de usuários, exibe o modal após um pequeno atraso.
+    // O atraso dá tempo para o CSS carregar e a transição ficar mais suave.
+    setTimeout(() => {
+        if (!saved || !usuarios[saved]) {
+            showLoginModal();
+        }
+    }, 500); // Reduzindo o tempo para 0.5 segundos para uma experiência mais ágil.
+};
+
+// Fechar o modal ao clicar fora da caixa de login
+document.addEventListener('click', function(event) {
+    const loginModal = document.getElementById('loginModal');
+    const loginBox = document.querySelector('.login-box');
+
+    // Verifica se o modal está ativo e se o clique foi fora da caixa de login
+    if (loginModal.classList.contains('active') && !loginBox.contains(event.target)) {
+        // Evita fechar se o clique for em um input dentro da caixa de login
+        if (!event.target.closest('.login-box')) {
+            loginModal.classList.remove('active');
+        }
+    }
+});
