@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Portal 1º BBM</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #003366, #cc0000);
+            color: white;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        header {
+            background-color: #001f3f;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        header img {
+            height: 60px;
+            margin: 0 10px;
+        }
+        .login-modal {
+            display: none;
+            position: fixed;
+            z-index: 999;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background-color: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .login-box input {
+            display: block;
+            margin: 10px 0;
+            width: 100%;
+            padding: 8px;
+        }
+        .container {
+            padding: 20px;
+        }
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .button-grid a {
+            background-color: #cc0000;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        .button-grid a:hover {
+            background-color: #990000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo_1bbm.png" alt="Logo 1º BBM">
+        <img src="logo_cbmrs.png" alt="Logo CBMRS">
+    </header>
+    <div class="container">
+        <h1>Portal Operacional do 1º BBM</h1>
+        <div class="button-grid">
+            <!-- Insert your links below -->
+            <a href="#">Mapa da Região</a>
+            <a href="#">Mapa de Hidrantes</a>
+            <a href="#">Procedimento Operacional Padrão</a>
+            <a href="#">Consulta Saldo Cartão Combustível</a>
+            <a href="#">Ficha de Ocorrência</a>
+            <a href="#">Ficha de Acidente com Viaturas</a>
+            <a href="#">Consulta Veículos</a>
+            <a href="#">Consulta Endereços</a>
+            <a href="#">Consulta Telefones Úteis</a>
+            <a href="#">Consulta Normas Técnicas</a>
+            <a href="#">Consulta POPs</a>
+            <a href="#">Consulta Escalas</a>
+            <a href="#">Consulta Plantões</a>
+            <a href="#">Consulta Efetivo</a>
+            <a href="#">Consulta Viaturas</a>
+            <a href="#">Outros Recursos</a>
+        </div>
+    </div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-box">
+            <img src="logo_cbmrs.png" alt="CBMRS" style="height: 50px; display: block; margin: 0 auto;">
+            <h2>Autenticação</h2>
+            <label for="idFuncional">Identidade Funcional:</label>
+            <input type="text" id="idFuncional">
+            <label for="senha">Senha:</label>
+            <input type="password" id="senha">
+            <label><input type="checkbox" id="lembrar"> Lembrar senha</label>
+            <button onclick="login()">Entrar</button>
+            <p id="loginErro" style="color: red;"></p>
+        </div>
+    </div>
+
+    <script>
+        const usuarios = {
+            "685582": { role: "admin", nomeGuerra: "HOMRICH" },
+            "3698653": { role: "admin", nomeGuerra: "JULIA" },
+            "4354737": { role: "admin", nomeGuerra: "BRUNO" },
+            "4279310": { role: "admin", nomeGuerra: "MARTINS" },
+            "3146316": { role: "admin", nomeGuerra: "LOPES" },
+            "3696790": { role: "admin", nomeGuerra: "DA COSTA" },
+            "2822130": { role: "admin", nomeGuerra: "MEDEIROS" },
+            "3696391": { role: "padrao", nomeGuerra: "BOTTINI" },
+            "3205614": { role: "admin", nomeGuerra: "HERMENEGILDO" },
+            "4672410": { role: "admin", nomeGuerra: "GARIBALDI" }
+        };
+
+        function login() {
+            const id = document.getElementById("idFuncional").value;
+            const senha = document.getElementById("senha").value.toLowerCase();
+            const lembrar = document.getElementById("lembrar").checked;
+
+            if (usuarios[id] && senha === (usuarios[id].nomeGuerra.toLowerCase() + "193")) {
+                if (lembrar) {
+                    localStorage.setItem("login", id);
+                }
+                document.getElementById("loginModal").style.display = "none";
+            } else {
+                document.getElementById("loginErro").innerText = "Identidade ou senha incorreta.";
+            }
+        }
+
+        window.onload = function() {
+            setTimeout(() => {
+                const saved = localStorage.getItem("login");
+                if (!saved || !usuarios[saved]) {
+                    document.getElementById("loginModal").style.display = "flex";
+                }
+            }, 5000);
+        };
+    </script>
+</body>
+</html>
